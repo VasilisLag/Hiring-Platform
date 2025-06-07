@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-const JobList = () => {
+const JobList = ({refresh}) => {
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
@@ -12,8 +12,10 @@ const JobList = () => {
       setJobs(data);
     }
     fetchJobs();
-  }, []);
+  }, [refresh]);
 
+  if (!jobs) return null;
+  
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold">Job Listings</h2>

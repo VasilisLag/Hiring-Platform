@@ -1,23 +1,23 @@
-"use client"; // This is required to mark this component as client-side
+"use client";
 
 import { useState } from 'react';
 
-const JobForm = ({ employerId }) => {
+const JobForm = ({ onJobCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [employer, setEmployer] = useState(''); // Νέο state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const job = { title, description, employerId };
-    const response = await fetch('/api/jobs', {
+    await fetch('/api/jobs', {
       method: 'POST',
-      body: JSON.stringify(job),
+      body: JSON.stringify({ title, description, employer }),
       headers: { 'Content-Type': 'application/json' },
     });
-
-    const result = await response.json();
-    console.log('Job created:', result);
+    if (onJobCreated) onJobCreated();
+    setTitle('');
+    setDescription('');
+    setEmployer('');
   };
 
   return (
@@ -25,6 +25,20 @@ const JobForm = ({ employerId }) => {
       <h2 className="text-2xl font-semibold text-center">Create a Job Listing</h2>
 
       <div className="flex flex-col gap-4">
+        {/* Employer Field */}
+        <div className="flex flex-col">
+          <label htmlFor="employer" className="text-lg font-medium">Employer</label>
+          <input
+            type="text"
+            id="employer"
+            value={employer}
+            onChange={(e) => setEmployer(e.target.value)}
+            className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter employer name"
+            required
+          />
+        </div>
+
         <div className="flex flex-col">
           <label htmlFor="title" className="text-lg font-medium">Job Title</label>
           <input
@@ -34,6 +48,7 @@ const JobForm = ({ employerId }) => {
             onChange={(e) => setTitle(e.target.value)}
             className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter the job title"
+            required
           />
         </div>
 
@@ -46,6 +61,7 @@ const JobForm = ({ employerId }) => {
             className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="4"
             placeholder="Enter the job description"
+            required
           />
         </div>
       </div>
