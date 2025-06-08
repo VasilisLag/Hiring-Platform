@@ -1,38 +1,50 @@
-"use client";
+'use client';
 
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
-const JobForm = ({ onJobCreated }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [employer, setEmployer] = useState(''); // Νέο state
+interface JobFormProps {
+  onJobCreated?: () => void;
+}
 
-  const handleSubmit = async (e) => {
+const JobForm = ({ onJobCreated }: JobFormProps) => {
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [employer, setEmployer] = useState<string>('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     await fetch('/api/jobs', {
       method: 'POST',
       body: JSON.stringify({ title, description, employer }),
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (onJobCreated) onJobCreated();
+
     setTitle('');
     setDescription('');
     setEmployer('');
   };
 
+  const handleChange = (setter: (value: string) => void) => 
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setter(e.target.value);
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl w-full bg-white p-8 rounded-lg shadow-md space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xl w-full bg-white p-8 rounded-lg shadow-md space-y-4"
+    >
       <h2 className="text-2xl font-semibold text-center">Create a Job Listing</h2>
 
       <div className="flex flex-col gap-4">
-        {/* Employer Field */}
         <div className="flex flex-col">
           <label htmlFor="employer" className="text-lg font-medium">Employer</label>
           <input
             type="text"
             id="employer"
             value={employer}
-            onChange={(e) => setEmployer(e.target.value)}
+            onChange={handleChange(setEmployer)}
             className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter employer name"
             required
@@ -45,7 +57,7 @@ const JobForm = ({ onJobCreated }) => {
             type="text"
             id="title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange(setTitle)}
             className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter the job title"
             required
@@ -57,9 +69,9 @@ const JobForm = ({ onJobCreated }) => {
           <textarea
             id="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleChange(setDescription)}
             className="mt-2 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
+            rows={4}
             placeholder="Enter the job description"
             required
           />
