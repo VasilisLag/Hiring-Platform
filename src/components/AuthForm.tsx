@@ -27,7 +27,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           ? { email, password, name, role }
           : { email, password };
 
-      const response = await fetch(`/api/users/${mode}`, {
+      const response = await fetch(`api/users/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

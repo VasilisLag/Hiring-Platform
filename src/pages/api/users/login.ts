@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase } from '../../../lib/mongo';
-import User, { IUser } from '../../../models/User';
+import { connectToDatabase } from '@/lib/mongo';
+import User, { IUser } from '@/models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectToDatabase();

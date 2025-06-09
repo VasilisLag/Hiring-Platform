@@ -1,19 +1,21 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export type UserRole = 'employee' | 'employer';
+export type UserRole = 'candidate' | 'employer';
 
 export interface IUser extends Document {
   name: string;
   email: string;
+  password: string;
   role: UserRole;
 }
 
 const UserSchema: Schema<IUser> = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   role: {
     type: String,
-    enum: ['employee', 'employer'],
+    enum: ['candidate', 'employer'],
     required: true,
   },
 });
