@@ -1,6 +1,7 @@
 // app/layout.tsx
-import '../../styles/globals.css';
+import '@/styles/globals.css';
 import { ReactNode } from 'react';
+import Navbar from '@/components/Navbar';
 
 export const metadata = {
   title: 'Hiring Platform',
@@ -15,15 +16,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="bg-gray-100 text-gray-900 font-sans">
-        <header className="w-full py-4 px-6 bg-white shadow">
-          <h1 className="text-xl font-bold">Hiring Platform</h1>
-        </header>
+
+        <Navbar />
 
         <main className="max-w-5xl mx-auto p-6">{children}</main>
 
         <footer className="w-full text-center py-6 text-sm text-gray-500">
           &copy; 2025 Hiring Platform
         </footer>
+
       </body>
     </html>
   );
